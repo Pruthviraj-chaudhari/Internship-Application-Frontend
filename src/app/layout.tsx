@@ -37,7 +37,7 @@ export default function RootLayout({
             <Sidebar navItems={facultyNavItems} />
             <main className="w-full pt-16">{children}</main>
           </div>
-          <Toaster />
+          <Toaster position="top-right" />
         </ThemeProvider>
       </body>
     </html>

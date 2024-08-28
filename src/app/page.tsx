@@ -3,7 +3,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
+import { Plus, Eye, Trash2 } from "lucide-react";
 import Link from "next/link";
 import {
   TableHead,
@@ -16,10 +16,10 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-import { Eye, Trash2Icon } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const breadcrumbItems = [{ title: "Employee", link: "/dashboard/employee" }];
 
@@ -111,29 +111,40 @@ export default function Page({ searchParams }: paramsProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {course.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.id}</TableCell>
-                    <TableCell>{item.courseTitle}</TableCell>
-                    <TableCell>{item.code}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => router.push(`/courses/${item.id}`) }
-                      >
-                        <Eye className="h-4 w-4 text-green-500" />
-                      </Button>{" "}
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => handleDeleteCourse(item.id)} // Pass the course id to the handler
-                      >
-                        <Trash2Icon className="h-4 w-4 text-red-400" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {loading ? (
+                  Array.from({ length: 5 }).map((_, index) => (
+                    <TableRow key={index}>
+                      <TableCell><Skeleton className="h-4 w-full" /></TableCell>
+                      <TableCell><Skeleton className="h-4 w-3/4" /></TableCell>
+                      <TableCell><Skeleton className="h-4 w-1/2" /></TableCell>
+                      <TableCell><Skeleton className="h-4 w-1/4" /></TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  course.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>{item.id}</TableCell>
+                      <TableCell>{item.courseTitle}</TableCell>
+                      <TableCell>{item.code}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => router.push(`/courses/${item.id}`)}
+                        >
+                          <Eye className="h-4 w-4 text-green-500" />
+                        </Button>{" "}
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => handleDeleteCourse(item.id)} // Pass the course id to the handler
+                        >
+                          <Trash2 className="h-4 w-4 text-red-400" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
             <ScrollBar orientation="horizontal" />
